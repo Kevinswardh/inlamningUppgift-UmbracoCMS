@@ -1,0 +1,56 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IPageHeader>
+@using Umbraco.Cms.Core.PublishedCache
+@using Umbraco.Cms.Core.Routing
+@using Umbraco.Cms.Core.Services.Navigation
+
+@inject IPublishedContentCache PublishedContentCache
+@inject IDocumentNavigationQueryService DocumentNavigationQueryService
+@inject IPublishedUrlProvider PublishedUrlProvider
+
+@{
+    var selection = Model.Ancestors().ToArray();
+    var homePageDisplayName = "Home";
+    var isFirstItem = true;
+}
+
+<section class="bg-[var(--color-white-100)] bg-no-repeat py-10 sm:py-14 md:py-16
+    [background-image:url('/images/Rectangle-left.svg'),url('/images/Rectangle-right.svg')]
+    [background-position:left_bottom,top_right]">
+
+    <div class="max-w-7xl mx-auto px-4 text-center">
+
+        <h1 class="text-[1.8rem] sm:text-[2.2rem] md:text-[2.5rem] font-bold text-[var(--color-primary)]">
+            @Model.PageTitle
+        </h1>
+
+        <div class="flex justify-center pt-4">
+            @if (selection.Length > 0)
+            {
+                <ul class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-center">
+
+                    @foreach (var item in selection.OrderBy(x => x.Level))
+                    {
+                        var displayName = isFirstItem ? homePageDisplayName : item.Name;
+
+                        <li class="flex items-center">
+                            <a class="text-xs sm:text-sm no-underline text-[var(--color-primary)] hover:text-[var(--color-secondary)]"
+                               href="@item.Url(PublishedUrlProvider)">
+                                @displayName
+                            </a>
+                            <i class="fa-solid fa-angle-right ml-1 sm:ml-2 text-[10px] text-[var(--color-primary)]"></i>
+                        </li>
+
+                        isFirstItem = false;
+                    }
+
+                    <li>
+                        <p class="text-xs sm:text-sm text-[var(--color-secondary)]">@Model.Name</p>
+                    </li>
+
+                </ul>
+            }
+        </div>
+
+    </div>
+
+</section>

@@ -1,0 +1,55 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    var content = (ContentModels.ServiceSection)Model.Content;
+    var settings = Model.Settings as ContentModels.ServiceSettings;
+    var sectionColor = settings?.BgColor?.Color ?? "#ffffff";
+}
+
+<section class="py-20" style="background:@sectionColor;">
+    <div class="max-w-7xl mx-auto px-4">
+
+        <!-- Titel / Eyebrow / RTE -->
+        <div class="flex flex-col items-center text-center gap-2">
+
+            @if (settings!.ShowServiceLabel)
+            {
+                <h2 class="text-xs font-bold uppercase tracking-wide text-[var(--color-secondary)]">
+                    @content.ServiceLabel
+                </h2>
+            }
+
+            <!-- RTE -->
+            <div class="rte max-w-2xl text-[var(--color-primary)]">
+                @Html.Raw(content.ServiceTitle)
+            </div>
+        </div>
+
+        <!-- Cards -->
+        <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- CARD TEMPLATE (testkort, loopas senare) -->
+            <div class="bg-[var(--color-neutral)] border border-[var(--color-border-gray)] rounded overflow-hidden flex flex-col">
+                <a href="#" class="no-underline flex flex-col h-full">
+
+                    <div class="p-6">
+                        <h3 class="font-semibold text-[var(--color-primary)] text-lg">
+                            Risk Management
+                        </h3>
+                    </div>
+
+                    <img src="/images/Risk-Managment.svg"
+                         alt="Risk management"
+                         class="w-full h-[220px] object-cover">
+
+                    <p class="text-sm text-[var(--color-body-text)] p-6">
+                        Dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                    </p>
+
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</section>

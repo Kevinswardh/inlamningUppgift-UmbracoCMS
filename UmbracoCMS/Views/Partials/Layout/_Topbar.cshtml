@@ -1,0 +1,56 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+
+@{
+    var rootContent = Umbraco.ContentAtRoot();
+    var siteSettings = rootContent.OfType<SiteSettings>().FirstOrDefault();
+    var contactAddress = siteSettings?.ContactAdress ?? "Ingen address angiven";
+}
+
+<!-- Topbar -->
+<div class="bg-[var(--color-primary)] text-[var(--color-neutral)]">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex flex-col gap-2 items-center justify-center
+                sm:flex-row sm:justify-between sm:gap-0">
+
+        <!-- Address -->
+        <p class="text-xs text-center sm:text-left">
+            @contactAddress
+        </p>
+
+        <!-- Social icons -->
+        <div class="flex w-full sm:w-auto justify-center border-t border-[var(--color-main-light)] sm:border-none">
+
+            @if (siteSettings?.PlatformList != null)
+            {
+                foreach (var item in siteSettings.PlatformList)
+                {
+                    if (item.Content is SocialMediaItem mediaItem)
+                    {
+                        string platform = mediaItem.PlatformName?.Trim().ToLower() ?? "";
+
+                        <a href="@mediaItem.PlatformAccountUrl"
+                           target="_blank"
+                           class="flex items-center justify-center px-4 py-2 text-base
+                                              border-l border-[var(--color-main-light)] sm:border-l sm:last:border-r">
+
+                            @* Render ikon beroende på valplattform *@
+                            @if (platform == "facebook")
+                            {
+                                <i class="fa-brands fa-facebook-f"></i>
+                            }
+                            else if (platform == "linkedin")
+                            {
+                                <i class="fa-brands fa-linkedin-in"></i>
+                            }
+                            else if (platform == "x" || platform == "twitter")
+                            {
+                                <i class="fa-brands fa-x-twitter"></i>
+                            }
+
+                        </a>
+                    }
+                }
+            }
+
+        </div>
+    </div>
+</div>

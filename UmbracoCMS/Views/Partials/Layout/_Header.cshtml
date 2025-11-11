@@ -1,0 +1,57 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.PublishedCache
+@using Umbraco.Cms.Core.Routing
+@using Umbraco.Cms.Core.Services.Navigation
+
+@inject IVariationContextAccessor VariationContextAccessor
+@inject IPublishedContentCache PublishedContentCache
+@inject IDocumentNavigationQueryService DocumentNavigationQueryService
+@inject IPublishedValueFallback PublishedValueFallback
+@inject IPublishedUrlProvider PublishedUrlProvider
+
+
+
+@{
+    var rootContent = Umbraco.ContentAtRoot();
+    var siteSettings = rootContent.OfType<SiteSettings>().FirstOrDefault();
+    var logo = siteSettings?.SiteLogo;
+    var selection = Model.Root().Children().Where(x => x.IsVisible(PublishedValueFallback)).ToArray();
+
+}
+
+
+
+<header class="relative shadow-sm z-[999]">
+    <nav class="max-w-7xl mx-auto flex items-center justify-between p-4">
+
+        @if (logo != null)
+        {
+            <a href="/" class="flex-shrink-0">
+                <img src="@logo.Url()" alt="Onatrix" />
+            </a>
+        }
+        else
+        {
+            <a href="/" class="flex-shrink-0">
+                Onatrix
+            </a>
+        }
+
+ 
+        @if (selection?.Length > 0)
+        {
+            <ul class="flex items-center gap-16">
+                @foreach (var item in selection)
+                {
+                    <li class="@(item.IsAncestorOrSelf(Model) ? "current" : null)">
+                        <a href="@item.Url(PublishedUrlProvider)" class="font-bold text-primary hover:text-secondary transition-colors">@item.Name</a>
+                    </li>
+                }
+            </ul>
+        }
+        <div class="flex items-center">
+            <i class="fa-solid fa-magnifying-glass text-lg text-primary"></i>
+        </div>
+    </nav>
+</header>
