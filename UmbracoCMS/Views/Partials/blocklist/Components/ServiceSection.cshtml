@@ -1,54 +1,52 @@
-﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>;
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
 @{
     var content = (ContentModels.ServiceSection)Model.Content;
     var settings = Model.Settings as ContentModels.ServiceSettings;
+
     var sectionColor = settings?.BgColor?.Color ?? "#ffffff";
+
+    var current = Umbraco.AssignedContentItem;
+    var siteRoot = current?.Root();
+    var servicePage = siteRoot?.Children<ServicePage>()?.FirstOrDefault();
+    var items = servicePage?.Children<ServiceDetail>()?.OrderByDescending(x => x.CreateDate).ToList() ?? [];
 }
 
-<section class="py-20" style="background:@sectionColor;">
+<section class="py-[4rem] bg-[var(--sectionColor)]" style="--sectionColor:@sectionColor;">
     <div class="max-w-7xl mx-auto px-4">
 
-        <!-- Titel / Eyebrow / RTE -->
-        <div class="flex flex-col items-center text-center gap-2">
+        <div class="flex flex-col gap-2 items-center">
 
             @if (settings!.ShowServiceLabel)
             {
-                <h2 class="text-xs font-bold uppercase tracking-wide text-[var(--color-secondary)]">
-                    @content.ServiceLabel
-                </h2>
+                <h2 class="text-[1.875rem] text-secondary font-bold uppercase">@content.ServiceLabel</h2>
             }
 
-            <!-- RTE -->
-            <div class="rte max-w-2xl text-[var(--color-primary)]">
-                @Html.Raw(content.ServiceTitle)
-            </div>
+            <div class="rte">@Html.Raw(content.ServiceTitle)</div>
         </div>
 
-        <!-- Cards -->
-        <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="mt-5 grid grid-cols-3 gap-4">
 
-            <!-- CARD TEMPLATE (testkort, loopas senare) -->
-            <div class="bg-[var(--color-neutral)] border border-[var(--color-border-gray)] rounded overflow-hidden flex flex-col">
-                <a href="#" class="no-underline flex flex-col h-full">
-
-                    <div class="p-6">
-                        <h3 class="font-semibold text-[var(--color-primary)] text-lg">
-                            Risk Management
-                        </h3>
+            @if (items.Any())
+            {
+                @foreach(var item in items)
+                {
+                    <div class="bg-neutral border-2 border-white-100 w-full min-h-[350px] overflow-hidden transition-all hover:border-secondary hover:shadow-[0_4px_15px_rgba(0,0,0,0.1)]">
+                        <a href="@item.Url()" class="block no-underline">
+                            <h4 class="p-[1.5rem] font-semibold text-primary p-4">@item.Name</h4>
+                            <img src="@(item.ServiceDetailThumbnail.Url() ?? "~/images/Risk-Management.svg")" class="block w-full h-[220px] object-cover" />
+                            <p class="text-sm p-[1.5rem]">@item.ServiceDetailExcerpt</p>
+                        </a>
                     </div>
+                }
+            }
+            else
+            {
+                <p>No Services Avaliable</p>
+            }
 
-                    <img src="/images/Risk-Managment.svg"
-                         alt="Risk management"
-                         class="w-full h-[220px] object-cover">
-
-                    <p class="text-sm text-[var(--color-body-text)] p-6">
-                        Dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                    </p>
-
-                </a>
-            </div>
-
+           
         </div>
 
     </div>
