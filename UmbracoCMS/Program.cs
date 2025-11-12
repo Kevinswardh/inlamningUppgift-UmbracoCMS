@@ -1,3 +1,5 @@
+using CmsWin._24.Services;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.CreateUmbracoBuilder()
@@ -5,6 +7,8 @@ builder.CreateUmbracoBuilder()
     .AddWebsite()
     .AddComposers()
     .Build();
+
+builder.Services.AddScoped<FormSubmissionsService>();
 
 WebApplication app = builder.Build();
 

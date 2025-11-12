@@ -1,5 +1,5 @@
-﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>;
-@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
 
 @{
     var content = (ContentModels.ServiceSection)Model.Content;
@@ -9,45 +9,179 @@
 
     var current = Umbraco.AssignedContentItem;
     var siteRoot = current?.Root();
-    var servicePage = siteRoot?.Children<ServicePage>()?.FirstOrDefault();
-    var items = servicePage?.Children<ServiceDetail>()?.OrderByDescending(x => x.CreateDate).ToList() ?? [];
+    var servicePage = siteRoot?.Children<ContentModels.ServicePage>()?.FirstOrDefault();
+    var items = servicePage?.Children<ContentModels.ServiceDetail>()?.OrderByDescending(x => x.CreateDate).ToList() ?? new List<ContentModels.ServiceDetail>();
+
+    // Kolla om pilar ska visas
+    bool showArrows = items.Count > 6;
 }
 
-<section class="py-[4rem] bg-[var(--sectionColor)]" style="--sectionColor:@sectionColor;">
-    <div class="max-w-7xl mx-auto px-4">
+<section class="py-[4rem]" style="background-color:@sectionColor;">
+    <div class="max-w-7xl mx-auto px-4 text-center">
 
-        <div class="flex flex-col gap-2 items-center">
+        @if (settings!.ShowServiceLabel)
+        {
+            <h2 class="text-[1.875rem] text-secondary font-bold uppercase mb-2">@content.ServiceLabel</h2>
+        }
+        <div class="rte mb-8">@Html.Raw(content.ServiceTitle)</div>
 
-            @if (settings!.ShowServiceLabel)
-            {
-                <h2 class="text-[1.875rem] text-secondary font-bold uppercase">@content.ServiceLabel</h2>
-            }
+        @if (items.Any())
+        {
+            <div class="simple-slider">
+                <div class="slider-wrapper">
+                    @for (int i = 0; i < items.Count; i += 6)
+                    {
+                        <div class="slide-page">
+                            @foreach (var item in items.Skip(i).Take(6))
+                            {
+                                <div class="card">
+                                    <a href="@item.Url()" class="block no-underline">
+                                        <img src="@(item.ServiceDetailThumbnail?.Url() ?? Url.Content("~/images/Risk-Management.svg"))" alt="@item.Name" />
+                                        <div class="info">
+                                            <h4>@item.Name</h4>
+                                            <p>@item.ServiceDetailExcerpt</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
 
-            <div class="rte">@Html.Raw(content.ServiceTitle)</div>
-        </div>
-
-        <div class="mt-5 grid grid-cols-3 gap-4">
-
-            @if (items.Any())
-            {
-                @foreach(var item in items)
+                @if (showArrows)
                 {
-                    <div class="bg-neutral border-2 border-white-100 w-full min-h-[350px] overflow-hidden transition-all hover:border-secondary hover:shadow-[0_4px_15px_rgba(0,0,0,0.1)]">
-                        <a href="@item.Url()" class="block no-underline">
-                            <h4 class="p-[1.5rem] font-semibold text-primary p-4">@item.Name</h4>
-                            <img src="@(item.ServiceDetailThumbnail.Url() ?? "~/images/Risk-Management.svg")" class="block w-full h-[220px] object-cover" />
-                            <p class="text-sm p-[1.5rem]">@item.ServiceDetailExcerpt</p>
-                        </a>
+                    <div class="slider-controls">
+                        <button id="prevBtn">‹</button>
+                        <button id="nextBtn">›</button>
                     </div>
                 }
-            }
-            else
-            {
-                <p>No Services Avaliable</p>
-            }
-
-           
-        </div>
+            </div>
+        }
+        else
+        {
+            <p>No services available.</p>
+        }
 
     </div>
 </section>
+
+<style>
+    .simple-slider {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .slider-wrapper {
+        display: flex;
+        transition: transform 0.5s ease;
+    }
+
+    .slide-page {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        flex: 0 0 100%;
+        padding: 0 0.5rem;
+    }
+
+    /* Kort */
+    .card {
+        background: #fff;
+        border: 1px solid #eaeaea;
+        border-radius: .375rem;
+        overflow: hidden;
+        transition: all .3s ease;
+    }
+
+        .card:hover {
+            border-color: #d9c3a9;
+            box-shadow: 0 4px 15px rgba(0,0,0,.1);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card .info {
+            padding: 1.25rem;
+            text-align: left;
+        }
+
+        .card h4 {
+            color: #4f5955;
+            font-weight: 600;
+            margin-bottom: .5rem;
+            font-size: 1.125rem;
+        }
+
+        .card p {
+            color: #353565;
+            font-size: .9375rem;
+            line-height: 1.4;
+        }
+
+    /* Navigationsknappar */
+    .slider-controls {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+        .slider-controls button {
+            background: #4f5955;
+            color: #fff;
+            border: none;
+            padding: .5rem 1rem;
+            border-radius: 4px;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+            .slider-controls button:hover {
+                background: #d9c3a9;
+            }
+
+    /* Responsivt */
+    @@media (max-width:1024px) {
+        .slide-page {
+            grid-template-columns: repeat(2,1fr);
+        }
+    }
+
+    @@media (max-width:640px) {
+        .slide-page {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const wrapper = document.querySelector(".slider-wrapper");
+      const pages = document.querySelectorAll(".slide-page");
+      const next = document.getElementById("nextBtn");
+      const prev = document.getElementById("prevBtn");
+      if (!wrapper || pages.length <= 1) return;
+
+      let index = 0;
+
+      function update() {
+        wrapper.style.transform = `translateX(-${index * 100}%)`;
+      }
+
+      next?.addEventListener("click", () => {
+        if (index < pages.length - 1) index++;
+        update();
+      });
+
+      prev?.addEventListener("click", () => {
+        if (index > 0) index--;
+        update();
+      });
+    });
+</script>

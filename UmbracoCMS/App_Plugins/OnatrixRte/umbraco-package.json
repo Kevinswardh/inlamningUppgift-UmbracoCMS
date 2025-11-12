@@ -207,6 +207,38 @@
           }
         }
       ]
+    },
+    {
+      "type": "tiptapToolbarExtension",
+      "kind": "styleMenu",
+      "alias": "Onatrix.Tiptap.ImageStyles",
+      "meta": {
+        "alias": "OnatrixImageStyles",
+        "icon": "icon-picture",
+        "label": "Image Styles"
+      },
+      "items": [
+        {
+          "label": "Default width",
+          "data": {
+            "tag": "img",
+            "class": "rte-img-default"
+          },
+          "appearance": {
+            "style": "border:1px solid #ddd; background:#f9f9f9; padding:3px;"
+          }
+        },
+        {
+          "label": "Full width",
+          "data": {
+            "tag": "img",
+            "class": "rte-img-full"
+          },
+          "appearance": {
+            "style": "border:1px solid #ddd; background:#e9f7ef; padding:3px;"
+          }
+        }
+      ]
     }
   ]
 }

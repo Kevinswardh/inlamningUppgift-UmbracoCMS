@@ -1,0 +1,44 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    var content = Model.Content;
+    var image = content.Value<IPublishedContent>("personImage");
+    var caption = content.Value<string>("personCaption");
+    var quote = content.Value<string>("personQuote");
+    var description = content.Value<string>("personDescription");
+}
+
+<section class="max-w-[1170px] mx-auto px-6 md:px-12 py-20">
+    <div class="grid md:grid-cols-2 gap-12 items-start">
+        <!-- Left: Image & Caption -->
+        <div class="flex flex-col items-start">
+            @if (image != null)
+            {
+                <img src="@image.Url()" alt="@image.Name" class="w-full h-auto rounded-md border border-[#e5e7eb] shadow-sm" />
+            }
+
+            @if (!string.IsNullOrWhiteSpace(caption))
+            {
+                <p class="mt-4 italic text-[#4f5955] text-sm">@caption</p>
+            }
+        </div>
+
+        <!-- Right: Quote & Text -->
+        <div class="text-[#535656]">
+            @if (!string.IsNullOrWhiteSpace(quote))
+            {
+                <p class="text-xl italic font-light leading-relaxed mb-6">
+                    @Html.Raw(quote)
+                </p>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(description))
+            {
+                <div class="space-y-4 leading-relaxed">
+                    @Html.Raw(description)
+                </div>
+            }
+        </div>
+    </div>
+</section>

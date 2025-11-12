@@ -1,0 +1,18 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Umbraco.Cms.Web.Common.PublishedModels
+
+@{
+    var rootContent = Umbraco.ContentAtRoot();
+    var siteSettings = rootContent.OfType<SiteSettings>().FirstOrDefault();
+
+    // Convert HTML string safely
+    var footerText = siteSettings?.FooterText?.ToHtmlString() ?? "© Onatrix. All Rights Reserved. Credits to <strong>Themesflat</strong>.";
+    var footerBg = siteSettings?.FooterBackground ?? "#0e0e0e";
+    var footerColor = siteSettings?.FooterTextColor ?? "#d9c3a9";
+}
+
+<footer style="background-color:@footerBg; color:@footerColor;" class="py-6">
+    <div class="max-w-[1170px] mx-auto px-5 text-center text-sm">
+        @Html.Raw(footerText)
+    </div>
+</footer>
