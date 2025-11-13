@@ -1,0 +1,54 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    var content = (ContactFormSection)Model.Content;
+}
+
+<section class="py-20">
+    <div class="max-w-4xl mx-auto px-4">
+
+        <h2 class="text-2xl font-semibold text-[#555E57] mb-6">
+            @content.Title
+        </h2>
+
+        @using (Html.BeginUmbracoForm("SubmitQuestion", "FormSubmission"))
+        {
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <input type="text"
+                       name="Name"
+                       required
+                       placeholder="@content.NamePlaceholder"
+                       class="px-4 py-3 w-full border border-gray-200 rounded-md text-sm" />
+
+                <input type="email"
+                       name="Email"
+                       required
+                       placeholder="@content.EmailPlaceholder"
+                       class="px-4 py-3 w-full border border-gray-200 rounded-md text-sm" />
+            </div>
+
+            <textarea rows="5"
+                  name="Message"
+                  required
+                  placeholder="@content.QuestionPlaceholder"
+                  class="px-4 py-3 w-full border border-gray-200 rounded-md text-sm"></textarea>
+
+            <button type="submit"
+                    class="px-8 py-3 rounded-md bg-[#555E57] text-white font-semibold hover:bg-[#434B45] transition">
+                @content.SubmitText
+            </button>
+
+            @if (TempData["questionSuccess"] != null)
+            {
+                <p class="text-green-600 mt-3">@TempData["questionSuccess"]</p>
+            }
+            @if (TempData["questionError"] != null)
+            {
+                <p class="text-red-600 mt-3">@TempData["questionError"]</p>
+            }
+        }
+
+
+    </div>
+</section>
