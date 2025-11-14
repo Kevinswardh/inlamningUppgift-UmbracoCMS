@@ -1,3 +1,6 @@
+using CmsWin._24.Services;
+using UmbracoCMS.Services;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.CreateUmbracoBuilder()
@@ -5,6 +8,12 @@ builder.CreateUmbracoBuilder()
     .AddWebsite()
     .AddComposers()
     .Build();
+
+builder.Services.AddScoped<FormSubmissionsService>();
+builder.Services.AddTransient<EmailService>();
+builder.Services.AddTransient<ContactBoxSubmissionService>();
+builder.Services.AddTransient<QuestionFormSubmissionService>();
+
 
 WebApplication app = builder.Build();
 

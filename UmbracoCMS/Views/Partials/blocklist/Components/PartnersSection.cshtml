@@ -1,0 +1,27 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
+
+@{
+    var content = (ContentModels.PartnersSection)Model.Content;
+    var partnerLogos = content.Value<IEnumerable<IPublishedContent>>("partnerLogos");
+}
+
+<section class="py-20 bg-[var(--color-neutral)]">
+    <div class="container mx-auto text-center px-4">
+        @if (partnerLogos != null && partnerLogos.Any())
+        {
+            <div class="flex flex-wrap justify-center items-center gap-10 md:gap-16">
+                @foreach (var logo in partnerLogos)
+                {
+                    <div class="flex justify-center items-center max-w-[140px] opacity-70 hover:opacity-100 transition duration-300 grayscale hover:grayscale-0">
+                        <img src="@logo.Url()" alt="@logo.Name" class="w-full h-auto object-contain" loading="lazy" />
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-[var(--color-body-text-100)] italic">No partner logos added yet.</p>
+        }
+    </div>
+</section>

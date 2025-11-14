@@ -1,0 +1,107 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using CmsWin._24.ViewModels
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    var content = (ContentModels.ContactCallbackSection)Model.Content;
+    var settings = Model.Settings as ContentModels.ContactCallbackSettings;
+
+    var formVM = new CallbackFormViewModel
+    {
+        Options = settings?.CallbackRequestOptions ?? [],
+    };
+
+    var bg = content.Value<IPublishedContent>("contactCallbackBg")?.Url();
+}
+
+<section class="relative py-24 md:py-32">
+    @if (!string.IsNullOrEmpty(bg))
+    {
+        <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image:url('@bg')"></div>
+    }
+
+    <div class="relative z-10 container mx-auto max-w-[1100px] px-4">
+        <div class="bg-[#ffffff] rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.12)] px-10 md:px-16 py-14 text-center">
+
+            <!-- Text -->
+            @if (!string.IsNullOrWhiteSpace(content.Value<string>("contactCallbackKicker")))
+            {
+                <span class="block text-[13px] font-semibold uppercase tracking-wider text-[#d9c3a9] mb-2">
+                    @content.Value("contactCallbackKicker")
+                </span>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(content.Value<string>("contactCallbackHeading")))
+            {
+                <h2 class="text-3xl md:text-4xl font-extrabold text-[#4f5955] mb-3">
+                    @content.Value("contactCallbackHeading")
+                </h2>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(content.Value<string>("contactCallbackDescription")))
+            {
+                <p class="max-w-[620px] mx-auto text-[#535656] italic mb-10">
+                    @Html.Raw(content.Value("contactCallbackDescription"))
+                </p>
+            }
+
+            <!-- Form -->
+            @using (Html.BeginUmbracoForm("HandleCallbackForm", "Form", FormMethod.Post, new { novalidate = "novalidate", id = "callbackForm" }))
+            {
+        
+
+                <div class="mx-auto w-full max-w-[900px] px-4 md:px-8 py-4
+                                grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 text-left place-items-center">
+
+                    <!-- Name -->
+                    <input type="text" name="Name" placeholder="Name"
+                           class="w-full h-12 px-4 border border-gray-300 rounded-md text-sm text-gray-700
+                                      placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4f5955]" required />
+
+                    <!-- Email -->
+                    <input type="email" name="Email" placeholder="Email address"
+                           class="w-full h-12 px-4 border border-gray-300 rounded-md text-sm text-gray-700
+                                      placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4f5955]" required />
+
+                    <!-- Phone -->
+                    <input type="tel" name="Phone" placeholder="Phone"
+                           class="w-full h-12 px-4 border border-gray-300 rounded-md text-sm text-gray-700
+                                      placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4f5955]" required />
+
+                    <!-- Selected Option -->
+                    <select name="SelectedOption"
+                            class="w-full h-12 px-4 border border-gray-300 rounded-md text-sm text-gray-700
+                                       focus:outline-none focus:ring-2 focus:ring-[#4f5955]" required>
+                        <option value="">Please select an option</option>
+                        @foreach (var opt in formVM.Options)
+                        {
+                            <option value="@opt">@opt</option>
+                        }
+                    </select>
+
+                    <!-- Submit -->
+                    <div class="col-span-full flex justify-center mt-2">
+                        <button type="submit"
+                                class="px-10 py-3 bg-[#4f5955] text-[#f2eddc] font-semibold rounded-md hover:bg-[#3e4744] transition">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            }
+
+            <!-- Result -->
+            @if (TempData["FormSuccess"] != null)
+            {
+                <div class="bg-green-50 text-green-700 p-4 mt-6 rounded-md text-center">
+                    @TempData["FormSuccess"]
+                </div>
+            }
+            else if (TempData["FormError"] != null)
+            {
+                <div class="bg-red-50 text-red-700 p-4 mt-6 rounded-md text-center">
+                    @TempData["FormError"]
+                </div>
+            }
+        </div>
+    </div>
+</section>

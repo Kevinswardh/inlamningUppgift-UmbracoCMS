@@ -1,0 +1,57 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    var content = (ContentModels.ProjectSection)Model.Content;
+
+    // Hitta projekt
+    var current = Umbraco.AssignedContentItem;
+    var siteRoot = current?.Root();
+    var projectsPage = siteRoot?.Children<ContentModels.ProjectsPage>()?.FirstOrDefault();
+    var items = projectsPage?.Children<ContentModels.ProjectDetail>()?
+                        .OrderByDescending(x => x.CreateDate)
+                        .ToList()
+               ?? new List<ContentModels.ProjectDetail>();
+}
+
+<section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-[1fr_320px] gap-12">
+
+        <!-- LEFT : Project List -->
+        <div>
+            @foreach (var item in items)
+            {
+                <div class="flex gap-6 mb-10">
+                    <img src="@(item.ProjectDetailThumbnail?.Url() ?? Url.Content("~/images/placeholder.png"))"
+                         alt="@item.Name"
+                         class="w-[200px] h-[130px] object-cover rounded" />
+
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary">@item.Name</h3>
+
+                        @if (item.CreateDate != default)
+                        {
+                            <span class="text-sm text-gray-500 block mb-2">
+                                @item.CreateDate.ToString("dd MMMM, yyyy")
+                            </span>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(item.ProjectDetailExcerpt))
+                        {
+                            <p class="text-[15px] mb-3">@item.ProjectDetailExcerpt</p>
+                        }
+
+                        <a href="@item.Url()" class="font-semibold text-primary">
+                            Read more →
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- RIGHT : Widgets -->
+        <aside class="flex flex-col gap-6 border-l border-gray-300 pl-6">
+            @Html.GetBlockListHtml(content.RightAsides)
+        </aside>
+    </div>
+</section>

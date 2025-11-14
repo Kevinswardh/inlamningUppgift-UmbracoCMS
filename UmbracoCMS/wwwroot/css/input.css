@@ -1,22 +1,29 @@
 ﻿@import "tailwindcss";
+@import "./forms.css";
 
 @theme {
+    /* Neutral whites */
     --color-neutral: #ffffff;
-    --color-white: #F2EDDC;
+    --color-white: #ffffff; /* FIX: ren vit */
     --color-white-100: #F7F7F7;
+    /* Dark */
     --color-dark: #0E0E0E;
-    --color-primary: #4F5955;
-    --color-main-light: #606966;
-    --color-accent: #F2EDDC;
-    --color-secondary: #D9C3A9;
-    --color-gray-400: #4B5244;
+    /* Brand (Onatrix) */
+    --color-primary: #4F5955; /* mörkgrön */
+    --color-secondary: #D9C3A9; /* beige accent */
+    --color-accent: #F2EDDC; /* ljus beige/cream – EJ vit */
+    --color-main-light: #EDECE6; /* ljus bakgrunds-ton, ej text */
+    /* Text */
     --color-body-text: #353565;
     --color-body-text-100: #999999;
+    /* UI grays */
+    --color-gray-400: #4B5244;
     --color-note1: #9C9EA6;
     --color-border-gray: #EAEAEA;
     --color-border-400: #C7C8C9;
+    /* Fonts */
     --font-poppins: "poppins", sans-serif;
-
+    /* Typography sizes */
     --text-rte-xl: 4.375rem;
     --text-rte-lg: 2.5rem;
     --text-rte-md: 1.25rem;
@@ -24,30 +31,77 @@
     --text-rte-xs: 0.875rem;
 }
 
-body{
-        @apply font-poppins;
+/* BODY FONT */
+body {
+    @apply font-poppins;
 }
 
+/* RTE HEADINGS */
 .rte h3 {
-        @apply text-[2.5rem] text-primary font-bold;
+    @apply text-[2.5rem] text-primary font-bold;
 }
 
+/* NAV ACTIVE STATE */
 .current a {
-        @apply text-secondary;
+    @apply text-secondary;
 }
 
+/* --- LIST STYLES --- */
 .rte-ul {
-        @apply list-disc pl-5 mt-3;
+    @apply list-disc pl-5 mt-3;
 }
-.rte-ul li{
+
+    .rte-ul li {
         @apply text-rte-xs text-body-text mb-3;
-}
-.rte-ul li::marker{
-         @apply text-secondary;
-}
-.rte p{
+    }
+
+        .rte-ul li::marker {
+            @apply text-secondary;
+        }
+
+/* --- PARAGRAPH STYLES --- */
+.rte p {
     @apply mb-3;
 }
-img{
-    @apply w-full h-auto object-cover;
+
+/* --- IMAGE STYLES --- */
+.rte-img-default {
+    @apply max-w-[600px] w-full h-auto block mx-auto;
+}
+
+.rte-img-full {
+    @apply w-full h-auto block;
+}
+
+/* --- SUCCESS SECTION --- */
+.success-section {
+    @apply relative bg-[var(--color-primary)] text-[var(--color-white)] py-20 overflow-hidden;
+}
+
+    .success-section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url('/images/world-map-light.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 80%;
+        opacity: 0.1;
+        pointer-events: none;
+    }
+
+.success-eyebrow {
+    @apply text-[13px] uppercase font-semibold tracking-wider text-[var(--color-secondary)] mb-2;
+}
+
+.success-title {
+    @apply text-3xl md:text-4xl font-bold text-[var(--color-white)] mb-8 relative;
+}
+
+.success-number {
+    @apply text-5xl font-bold text-[var(--color-secondary)];
+}
+
+.success-desc {
+    @apply mt-2 text-[var(--color-white)];
 }
