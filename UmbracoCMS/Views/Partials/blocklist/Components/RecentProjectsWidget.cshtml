@@ -1,0 +1,74 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<
+Umbraco.Cms.Core.Models.Blocks.BlockListItem
+>
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Extensions;
+
+@{
+    var content = (RecentProjectsWidget)Model.Content;
+
+    var root = Umbraco.ContentAtRoot()?.FirstOrDefault();
+
+    var latest = root?
+        .DescendantsOfType("projectDetail")
+        .Where(x => x.IsVisible())
+        .OrderByDescending(x => x.CreateDate)
+        .Take(4)
+        .ToList();
+}
+
+@if (latest != null && latest.Any())
+{
+    <div class="recent-widget space-y-6 mb-10">
+
+        <h4 class="text-xl font-semibold text-[var(--color-dark)] mb-4">
+            @(string.IsNullOrWhiteSpace(content.WidgetTitle)
+                    ? "Recent projects"
+                    : content.WidgetTitle)
+    </h4>
+
+        <ul class="space-y-6">
+
+        @foreach (var item in latest)
+            {
+                var thumb = item.Value<IPublishedContent>("projectDetailThumbnail");
+                var excerpt = item.Value<string>("projectDetailExcerpt");
+
+                <li class="flex gap-4 items-start">
+
+                    <!-- Thumbnail -->
+                    <div class="w-24 h-24 rounded-md overflow-hidden bg-gray-200 flex-shrink-0">
+                        @if (thumb != null)
+                        {
+                            <img src="@thumb.Url()" class="w-full h-full object-cover" />
+                        }
+                    </div>
+
+                    <!-- Text -->
+                    <div class="flex flex-col">
+
+                        <a href="@item.Url()"
+                           class="font-semibold text-[var(--color-primary)] hover:text-[var(--color-secondary)] text-base">
+                            @item.Name
+                        </a>
+
+                        <span class="text-xs text-[var(--color-body-text-100)] mt-1">
+                            @item.CreateDate.ToString("MMMM d, yyyy")
+                        </span>
+
+                        @if (!string.IsNullOrWhiteSpace(excerpt))
+                        {
+                            <p class="text-sm text-[var(--color-body-text-100)] mt-2 line-clamp-3">
+                                @excerpt
+                            </p>
+                        }
+
+                    </div>
+
+                </li>
+            }
+
+        </ul>
+
+    </div>
+}

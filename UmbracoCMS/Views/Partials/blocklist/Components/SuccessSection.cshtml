@@ -1,0 +1,64 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
+
+@{
+    var content = (ContentModels.SuccessSection)Model.Content;
+
+    var title = content.Value<string>("successTitle");
+    var eyebrow = content.Value<string>("successEyebrow");
+
+
+    var statOneNumber = content.Value<string>("statOneNumber");
+    var statOneDesc = content.Value<string>("statOneDesc");
+
+    var statTwoNumber = content.Value<string>("statTwoNumber");
+    var statTwoDesc = content.Value<string>("statTwoDesc");
+
+    var statThreeNumber = content.Value<string>("statThreeNumber");
+    var statThreeDesc = content.Value<string>("statThreeDesc");
+
+    var videoImage = content.Value<IPublishedContent>("videoImage");
+}
+
+<section class="success-section relative overflow-hidden py-20 bg-[var(--color-primary)] text-[var(--color-white)]">
+    <!-- Bakgrundskarta -->
+    <div class="absolute inset-0 bg-[url('/images/world-map-light.svg')] bg-no-repeat bg-center bg-contain opacity-10 pointer-events-none"></div>
+
+    <div class="relative container mx-auto text-center px-4 z-10">
+        @if (!string.IsNullOrWhiteSpace(eyebrow))
+        {
+            <p class="text-[13px] uppercase font-semibold tracking-wider text-[var(--color-secondary)] mb-2">
+                @eyebrow
+            </p>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(title))
+        {
+            <h2 class="text-3xl md:text-4xl font-bold text-[var(--color-white)] mb-10">
+                @title
+            </h2>
+        }
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center mb-12">
+            <div>
+                <p class="text-5xl font-bold text-[var(--color-secondary)]">@statOneNumber</p>
+                <p class="mt-2 text-[var(--color-white)]">@statOneDesc</p>
+            </div>
+            <div>
+                <p class="text-5xl font-bold text-[var(--color-secondary)]">@statTwoNumber</p>
+                <p class="mt-2 text-[var(--color-white)]">@statTwoDesc</p>
+            </div>
+            <div>
+                <p class="text-5xl font-bold text-[var(--color-secondary)]">@statThreeNumber</p>
+                <p class="mt-2 text-[var(--color-white)]">@statThreeDesc</p>
+            </div>
+        </div>
+
+        @if (videoImage != null)
+        {
+            <div class="max-w-4xl mx-auto">
+                <img src="@videoImage.Url()" alt="@videoImage.Name" class="rounded-lg w-full h-auto" />
+            </div>
+        }
+    </div>
+</section>

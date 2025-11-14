@@ -1,0 +1,85 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+
+@{
+    var content = Model.Content;
+
+    var heading = content.Value<string>("contactHeading");
+    var image = content.Value<IPublishedContent>("contactImage");
+
+    var officeTitle = content.Value<string>("officeTitle");
+    var officeValue = content.Value<string>("officeValue");
+
+    var phoneTitle = content.Value<string>("phoneTitle");
+    var phoneValue = content.Value<string>("phoneValue");
+
+    var emailTitle = content.Value<string>("emailTitle");
+    var emailValue = content.Value<string>("emailValue");
+}
+
+<section class="bg-[#f7f7f7] py-20">
+    <div class="max-w-[1170px] mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-12 items-center">
+        <!-- Left: Image -->
+        <div>
+            @if (image != null)
+            {
+                <img src="@image.Url()" alt="@image.Name"
+                     class="w-full max-w-[485px] h-auto object-cover rounded-md shadow-sm mx-auto md:mx-0" />
+            }
+        </div>
+
+        <!-- Right: Text -->
+        <div>
+            @if (!string.IsNullOrWhiteSpace(heading))
+            {
+                <h2 class="text-[40px] text-[#4f5955] font-bold mb-10 leading-tight">
+                    @Html.Raw(heading)
+                </h2>
+            }
+
+            <div class="flex flex-col gap-6">
+                @if (!string.IsNullOrWhiteSpace(officeValue))
+                {
+                    <div class="flex items-start gap-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="24" viewBox="0 0 17 21"
+                             class="text-[#d9c3a9] fill-current flex-shrink-0">
+                            <path d="M8.41098 4.51404C7.63963 4.51404 6.88562 4.74277 6.24426 5.17131C5.60291 5.59985 5.10304 6.20895 4.80786 6.92158C4.51268 7.63421 4.43544 8.41837 4.58592 9.1749C4.73641 9.93142 5.10785 10.6263 5.65328 11.1718C6.1987 11.7172 6.89361 12.0886 7.65013 12.2391C8.40666 12.3896 9.19083 12.3124 9.90346 12.0172C10.6161 11.722 11.2252 11.2221 11.6537 10.5808C12.0823 9.93941 12.311 9.18539 12.311 8.41404C12.311 7.90188 12.2101 7.39475 12.0141 6.92158C11.8181 6.44841 11.5309 6.01847 11.1687 5.65633C10.8066 5.29418 10.3766 5.00691 9.90346 4.81091C9.43029 4.61492 8.92314 4.51404 8.41098 4.51404Z" />
+                            <path d="M8.413 0C6.18246 0.00238235 4.04397 0.889514 2.46674 2.46674C0.889512 4.04397 0.00238235 6.18247 0 8.413V8.646C0 10.992 1.345 13.726 4 16.772C5.19763 18.1433 6.50168 19.418 7.9 20.584L8.413 21L8.929 20.583C10.3273 19.417 11.6314 18.1424 12.829 16.771C15.482 13.725 16.829 10.991 16.829 8.645V8.413C16.8266 6.18195 15.9391 4.043 14.3612 2.46568C12.7833 0.88837 10.6441 0.00158818 8.413 0Z" />
+                        </svg>
+                        <div>
+                            <div class="font-semibold text-[#4f5955]">@officeTitle</div>
+                            <div class="italic text-[#4f5955]">@officeValue</div>
+                        </div>
+                    </div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(phoneValue))
+                {
+                    <div class="flex items-start gap-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 17 17"
+                             class="text-[#d9c3a9] fill-current flex-shrink-0">
+                            <path d="M16.174 2.22L13.947 0L9.32 4.619L11.113 6.471C10.5474 7.44808 9.8536 8.34505 9.05 9.138C8.25234 9.94568 7.35116 10.6441 6.37 11.215L4.554 9.422L0 13.949L2.215 16.179C2.62652 16.5917 3.15631 16.866 3.73083 16.9638C4.30535 17.0617 4.89608 16.9782 5.421 16.725C7.85736 15.5234 10.078 13.9268 11.993 12C13.9208 10.0856 15.5184 7.86521 16.721 5.429C16.905 5.05005 17.0004 4.63424 17 4.213C17.0001 3.8428 16.9272 3.47622 16.7855 3.13423C16.6438 2.79224 16.436 2.48157 16.174 2.22Z" />
+                        </svg>
+                        <div>
+                            <div class="font-semibold text-[#4f5955]">@phoneTitle</div>
+                            <div class="italic text-[#4f5955]">@phoneValue</div>
+                        </div>
+                    </div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(emailValue))
+                {
+                    <div class="flex items-start gap-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 17 13"
+                             class="text-[#d9c3a9] fill-current flex-shrink-0">
+                            <path d="M1.993 12.485C1.46499 12.4832 0.959135 12.2726 0.585774 11.8992C0.212413 11.5259 0.00184482 11.02 0 10.492L0 1.992C0.00210814 1.46416 0.212793 0.958565 0.586125 0.585419C0.959458 0.212274 1.46516 0.00184323 1.993 0L15.008 0C15.5358 0.00210814 16.0414 0.212793 16.4146 0.586125C16.7877 0.959458 16.9982 1.46516 17 1.993V10.493C16.9982 11.021 16.7876 11.5269 16.4142 11.9002C16.0409 12.2736 15.535 12.4842 15.007 12.486L1.993 12.485ZM1.329 10.492C1.32926 10.668 1.39931 10.8368 1.52377 10.9612C1.64824 11.0857 1.81698 11.1557 1.993 11.156H15.008C15.184 11.1557 15.3528 11.0857 15.4772 10.9612C15.6017 10.8368 15.6717 10.668 15.672 10.492V2.4L8.5 7.734L1.328 2.4L1.329 10.492ZM8.5 6.079L14.887 1.329H2.114L8.5 6.079Z" />
+                        </svg>
+                        <div>
+                            <div class="font-semibold text-[#4f5955]">@emailTitle</div>
+                            <div class="italic text-[#4f5955]">@emailValue</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,19 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.Blocks;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<BlockListItem<ArticleTextBlock>>
+
+<section class="my-10">
+
+    @if (!string.IsNullOrWhiteSpace(Model.Content.Title))
+    {
+        <h3 class="text-xl font-semibold mb-3">@Model.Content.Title</h3>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.Content.Text?.ToString()))
+    {
+        <div class="prose max-w-none text-gray-700">
+            @Html.Raw(Model.Content.Text)
+        </div>
+    }
+
+</section>

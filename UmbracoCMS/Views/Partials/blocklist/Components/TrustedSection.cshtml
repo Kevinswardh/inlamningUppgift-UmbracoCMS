@@ -1,0 +1,54 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
+@{
+    var content = (ContentModels.TrustedSection)Model.Content;
+
+    var title = content.Value<string>("trustedTitle");
+    var highlight = content.Value<string>("trustedHighlight");
+    var description = content.Value("trustedDescription");
+    var buttonText = content.Value<string>("buttonText");
+    var buttonUrl = content.Value<string>("buttonUrl");
+    var image = content.Value<IPublishedContent>("image");
+}
+
+<section class="py-20 text-center" style="background-color:var(--color-white-100);">
+    <div class="container mx-auto px-4">
+        @* Titel + Highlight *@
+        @if (!string.IsNullOrWhiteSpace(title) || !string.IsNullOrWhiteSpace(highlight))
+        {
+            <h2 class="text-3xl md:text-4xl font-bold" style="color:var(--color-primary);">
+                @title
+                @if (!string.IsNullOrWhiteSpace(highlight))
+                {
+                    <span style="color:var(--color-secondary);"> @highlight </span>
+                }
+            </h2>
+        }
+
+        @* Beskrivning *@
+        @if (description != null)
+        {
+            <div class="max-w-2xl mx-auto mt-4 leading-relaxed" style="color:var(--color-body-text-100);">
+                @Html.Raw(description)
+            </div>
+        }
+
+        @* Knapp *@
+        @if (!string.IsNullOrWhiteSpace(buttonText))
+        {
+            <a href="@buttonUrl"
+               class="inline-block mt-8 font-semibold py-3 px-8 rounded-md transition-colors duration-200"
+               style="background-color:var(--color-primary); color:var(--color-white);">
+                @buttonText
+            </a>
+        }
+
+        @* Bild *@
+        @if (image != null)
+        {
+            <div class="max-w-3xl mx-auto mt-12">
+                <img src="@image.Url()" alt="@image.Name" class="rounded-lg w-full h-auto" />
+            </div>
+        }
+    </div>
+</section>

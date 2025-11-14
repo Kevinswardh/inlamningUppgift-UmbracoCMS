@@ -4,4 +4,4 @@
 	Layout = "mainLayout.cshtml";
 }
 <partial name="Partials/Layout/_PageHeader" model="Model" />
-<h1>@Model.PageTitle</h1>
+@Html.GetBlockListHtml(Model.Sections);

@@ -1,27 +1,35 @@
 ﻿@using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ServiceDetail>
 @{
-	Layout = "mainLayout.cshtml";
+    Layout = "mainLayout.cshtml";
 }
 
-<partial name="Partials/Layout/_PageHeader" model="(IPageHeader)Model"/>
+<partial name="Partials/Layout/_PageHeader" model="(IPageHeader)Model" />
 
 <section class="py-16">
-	<div class="max-w-7xl mx-auto px-4">
-		<div class="flex sm\:flex-row justify-between">
-			<aside class="w-3/12 flex flex-col gap-4">
-			@Html.GetBlockListHtml(Model.ServiceDetailAsides)
-			</aside>
+    <div class="max-w-7xl mx-auto px-4">
 
-			<div class="block w-px bg-border-gray">
+        <div class="flex flex-col gap-10 md:flex-row md:justify-between">
 
-			</div>
+            <!-- CONTENT (Full width on mobile, right on desktop) -->
+            <div class="w-full md:w-8/12 flex flex-col gap-6 order-1 md:order-2">
+                @Html.Raw(Model.ServiceDetailBody)
+            </div>
 
+            <!-- DIVIDER (only desktop) -->
+            <div class="hidden md:block w-px bg-gray-300"></div>
 
-			<div class="w-8/12 flex flex-col gap-2">
-				@Html.Raw(Model.ServiceDetailBody)
-		    </div>
+            <!-- ASIDE (moves below on mobile) -->
+            <aside class="w-full md:w-3/12 flex flex-col gap-6 order-2 md:order-1">
+                @Html.GetBlockListHtml(Model.ServiceDetailAsides)
+            </aside>
 
-		</div>
-	</div>
+        </div>
+
+    </div>
 </section>
+
+@if (Model.ServiceDetailSections != null && Model.ServiceDetailSections.Any())
+{
+    @Html.GetBlockListHtml(Model.ServiceDetailSections)
+}
