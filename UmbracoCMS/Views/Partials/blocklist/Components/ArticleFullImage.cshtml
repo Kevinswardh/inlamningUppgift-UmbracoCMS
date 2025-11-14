@@ -1,0 +1,17 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.Blocks;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<BlockListItem<ArticleFullImage>>
+
+<section class="my-14">
+
+    @if (Model.Content.Image != null)
+    {
+        <img src="@Model.Content.Image.Url()" class="rounded-lg w-full shadow-md" />
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.Content.Caption))
+    {
+        <p class="text-sm text-gray-500 mt-2">@Model.Content.Caption</p>
+    }
+
+</section>

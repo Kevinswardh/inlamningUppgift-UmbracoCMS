@@ -1,57 +1,129 @@
 ﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
-@using Umbraco.Cms.Core.Models.PublishedContent
 @using Umbraco.Cms.Core.PublishedCache
 @using Umbraco.Cms.Core.Routing
-@using Umbraco.Cms.Core.Services.Navigation
-
-@inject IVariationContextAccessor VariationContextAccessor
-@inject IPublishedContentCache PublishedContentCache
-@inject IDocumentNavigationQueryService DocumentNavigationQueryService
-@inject IPublishedValueFallback PublishedValueFallback
-@inject IPublishedUrlProvider PublishedUrlProvider
-
-
+@inject IPublishedUrlProvider UrlProvider
 
 @{
     var rootContent = Umbraco.ContentAtRoot();
     var siteSettings = rootContent.OfType<SiteSettings>().FirstOrDefault();
     var logo = siteSettings?.SiteLogo;
-    var selection = Model.Root().Children().Where(x => x.IsVisible(PublishedValueFallback)).ToArray();
 
+    var navItems = Model.Root()
+        .Children()
+        .Where(x => x.IsVisible())
+        .ToArray();
 }
 
+<header class="shadow-sm z-[999] relative bg-white">
+    <nav class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
 
+        <!-- LOGO -->
+        <a href="/" class="flex-shrink-0">
+            @if (logo != null)
+            {
+                <img src="@logo.Url()" class="h-10 w-auto" alt="Onatrix" />
+            }
+            else
+            {
+                <span class="text-2xl font-bold text-primary">Onatrix</span>
+            }
+        </a>
 
-<header class="relative shadow-sm z-[999]">
-    <nav class="max-w-7xl mx-auto flex items-center justify-between p-4">
+        <!-- DESKTOP MENU -->
+        <ul class="hidden md:flex items-center gap-12">
+            @foreach (var item in navItems)
+            {
+                <li>
+                    <a href="@item.Url(UrlProvider)"
+                       class="font-bold text-primary hover:text-secondary transition-colors @(item.IsAncestorOrSelf(Model) ? "text-secondary" : "")">
+                        @item.Name
+                    </a>
+                </li>
+            }
+        </ul>
 
-        @if (logo != null)
-        {
-            <a href="/" class="flex-shrink-0">
-                <img src="@logo.Url()" alt="Onatrix" />
-            </a>
-        }
-        else
-        {
-            <a href="/" class="flex-shrink-0">
-                Onatrix
-            </a>
-        }
+        <!-- SEARCH ICON -->
+        <div class="hidden md:flex items-center">
+            <i class="fa-solid fa-magnifying-glass text-lg text-primary"></i>
+        </div>
 
- 
-        @if (selection?.Length > 0)
-        {
-            <ul class="flex items-center gap-16">
-                @foreach (var item in selection)
+        <!-- MOBILE BURGER -->
+        <button id="mobile-toggle"
+                class="md:hidden text-3xl text-primary focus:outline-none">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div id="mobile-menu"
+         class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden">
+
+        <div class="bg-white w-72 h-full shadow-xl p-6 animate-slide-right">
+            <!-- CLOSE BUTTON -->
+            <button id="mobile-close" class="text-2xl mb-6 text-primary">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- LINKS -->
+            <ul class="flex flex-col gap-6">
+                @foreach (var item in navItems)
                 {
-                    <li class="@(item.IsAncestorOrSelf(Model) ? "current" : null)">
-                        <a href="@item.Url(PublishedUrlProvider)" class="font-bold text-primary hover:text-secondary transition-colors">@item.Name</a>
+                    <li>
+                        <a href="@item.Url(UrlProvider)"
+                           class="text-lg font-bold text-primary hover:text-secondary transition-colors">
+                            @item.Name
+                        </a>
                     </li>
                 }
             </ul>
-        }
-        <div class="flex items-center">
-            <i class="fa-solid fa-magnifying-glass text-lg text-primary"></i>
+
+            <div class="mt-10 border-t pt-6">
+                <i class="fa-solid fa-magnifying-glass text-xl text-primary"></i>
+            </div>
         </div>
-    </nav>
+    </div>
 </header>
+
+
+<!-- MOBILE MENU SCRIPT -->
+<script>
+    const toggleBtn = document.getElementById("mobile-toggle");
+    const closeBtn = document.getElementById("mobile-close");
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    toggleBtn.addEventListener("click", () => {
+        mobileMenu.classList.remove("hidden");
+    });
+
+    closeBtn.addEventListener("click", () => {
+        mobileMenu.classList.add("hidden");
+    });
+
+    // Close by clicking outside panel
+    mobileMenu.addEventListener("click", (e) => {
+        if (e.target === mobileMenu) {
+            mobileMenu.classList.add("hidden");
+        }
+    });
+</script>
+
+<style type="text/css">
+    /* Slide-in animation */
+    @@keyframes slideRight {
+        from
+
+    {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+
+    }
+
+    .animate-slide-right {
+        animation: slideRight 0.3s ease-out;
+    }
+</style>
+

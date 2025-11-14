@@ -1,0 +1,50 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ProjectDetail>
+
+@{
+    Layout = "mainLayout.cshtml";
+}
+
+<partial name="Partials/Layout/_PageHeader" model="(IPageHeader)Model" />
+
+<section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-[770px_1fr] gap-12">
+
+        <!-- LEFT : Article Content -->
+        <article class="flex flex-col gap-8">
+
+            @* @if (Model.ProjectDetailThumbnail != null)
+            {
+                <img src="@Model.ProjectDetailThumbnail.Url()"
+                     alt="@Model.Name"
+                     class="rounded w-full h-auto" />                              Inte i behov av i artiklen
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.ProjectDetailExcerpt))
+            {
+                <p class="font-semibold text-secondary">
+                    @Model.ProjectDetailExcerpt
+                </p>
+            } *@
+
+            <!-- BODY (Block List Rendering) -->
+            @if (Model.ProjectDetailBody != null && Model.ProjectDetailBody.Any())
+            {
+                @await Html.GetBlockListHtmlAsync(Model.ProjectDetailBody)
+            }
+
+        </article>
+
+        <!-- RIGHT : Asides -->
+        <aside class="flex flex-col gap-8 border-l border-gray-300 pl-6">
+            @await Html.GetBlockListHtmlAsync(Model.ProjectDetailAsides)
+        </aside>
+
+    </div>
+</section>
+
+<!-- EXTRA SECTIONS -->
+@if (Model.ProjectDetailSections != null && Model.ProjectDetailSections.Any())
+{
+    @await Html.GetBlockListHtmlAsync(Model.ProjectDetailSections)
+}

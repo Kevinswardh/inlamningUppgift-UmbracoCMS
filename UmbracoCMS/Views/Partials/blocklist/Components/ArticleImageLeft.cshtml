@@ -1,0 +1,28 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.Blocks;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<BlockListItem<ArticleImageLeft>>
+
+<section class="my-14 grid md:grid-cols-2 gap-8 items-center">
+
+    <div>
+        @if (Model.Content.Image != null)
+        {
+            <img src="@Model.Content.Image.Url()" class="rounded-lg shadow-md" />
+        }
+    </div>
+
+    <div>
+        @if (!string.IsNullOrWhiteSpace(Model.Content.Title))
+        {
+            <h3 class="text-xl font-semibold mb-3">@Model.Content.Title</h3>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Model.Content.Text?.ToString()))
+        {
+            <div class="prose max-w-none text-gray-700">
+                @Html.Raw(Model.Content.Text)
+            </div>
+        }
+    </div>
+
+</section>
