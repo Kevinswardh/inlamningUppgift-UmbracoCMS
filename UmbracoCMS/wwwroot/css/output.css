@@ -53,7 +53,6 @@
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
     --font-weight-extrabold: 800;
-    --tracking-wide: 0.025em;
     --tracking-wider: 0.05em;
     --leading-tight: 1.25;
     --leading-relaxed: 1.625;
@@ -74,6 +73,7 @@
     --color-main-light: #EDECE6;
     --color-body-text: #353565;
     --color-body-text-100: #999999;
+    --color-border-gray: #EAEAEA;
     --font-poppins: "poppins", sans-serif;
     --text-rte-xl: 4.375rem;
     --text-rte-lg: 2.5rem;
@@ -413,14 +413,8 @@
   .h-12 {
     height: calc(var(--spacing) * 12);
   }
-  .h-16 {
-    height: calc(var(--spacing) * 16);
-  }
   .h-24 {
     height: calc(var(--spacing) * 24);
-  }
-  .h-56 {
-    height: calc(var(--spacing) * 56);
   }
   .h-72 {
     height: calc(var(--spacing) * 72);
@@ -451,9 +445,6 @@
   }
   .w-7\/12 {
     width: calc(7/12 * 100%);
-  }
-  .w-16 {
-    width: calc(var(--spacing) * 16);
   }
   .w-24 {
     width: calc(var(--spacing) * 24);
@@ -547,9 +538,6 @@
   }
   .gap-2 {
     gap: calc(var(--spacing) * 2);
-  }
-  .gap-3 {
-    gap: calc(var(--spacing) * 3);
   }
   .gap-4 {
     gap: calc(var(--spacing) * 4);
@@ -938,10 +926,6 @@
   .tracking-\[0\.08em\] {
     --tw-tracking: 0.08em;
     letter-spacing: 0.08em;
-  }
-  .tracking-\[2px\] {
-    --tw-tracking: 2px;
-    letter-spacing: 2px;
   }
   .tracking-\[3px\] {
     --tw-tracking: 3px;
